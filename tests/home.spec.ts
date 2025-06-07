@@ -6,3 +6,12 @@ test("ページの表示テスト", async ({ page }) => {
   await expect(page.getByRole("heading")).toHaveText(/Playwrightのハンズオン/);
   await expect(page.getByRole("button", { name: /操作ボタン/ })).toBeVisible();
 });
+
+test("フォーム画面への遷移テスト", async ({ page }) => {
+  await page.goto("http://localhost:3000/");
+  await page.getByRole("link", { name: "入力フォーム" }).click();
+  await expect(
+    page.getByRole("heading", { name: "入力フォーム" })
+  ).toBeVisible();
+  await expect(page).toHaveURL("http://localhost:3000/form");
+});
