@@ -28,7 +28,7 @@ test("フォーム操作のテスト", async ({ page }) => {
 
 test("フォーム操作のテスト(サーバーモック)", async ({ page }) => {
   await page.route("/api/shuffle", async (route) => {
-    const json = [{ members: ["張飛", "関羽", "劉備"] }];
+    const json = { members: ["張飛", "関羽", "劉備"] };
     await route.fulfill({ json });
   });
 
