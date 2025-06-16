@@ -27,9 +27,11 @@ test("フォーム操作のテスト", async ({ page }) => {
 });
 
 test("フォーム操作のテスト(サーバーモック)", async ({ page }) => {
-  await page.route("/api/shuffle", async (route) => {
-    const json = { members: ["張飛", "関羽", "劉備"] };
-    await route.fulfill({ json });
+  await page.route("**/api/shuffle", async (route) => {
+    await route.fulfill({
+      status: 200,
+      json: { members: ["張飛", "関羽", "劉備"] },
+    });
   });
 
   await page.goto("http://localhost:3000/form");
