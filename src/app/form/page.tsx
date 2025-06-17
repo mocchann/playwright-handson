@@ -11,6 +11,12 @@ export default function Form() {
     <main>
       <h1>入力フォーム</h1>
       <ShuffleMemberForm />
+      <div>
+        <button>更新</button>
+        <nav>
+          <a href="/news">最新情報</a>
+        </nav>
+      </div>
     </main>
   );
 }
