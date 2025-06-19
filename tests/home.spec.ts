@@ -43,3 +43,9 @@ test("フォーム操作のテスト(サーバーモック)", async ({ page }) =
     /張飛→関羽→劉備/
   );
 });
+
+test("ロール名で要素取得", async ({ page }) => {
+  await page.goto("http://localhost:3000/form");
+  await expect(page.getByRole("link", { name: /最新情報/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /更新/ })).toBeVisible();
+});
