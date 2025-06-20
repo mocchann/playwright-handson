@@ -17,6 +17,15 @@ export default function Form() {
           <a href="/news">最新情報</a>
         </nav>
       </div>
+      <div>
+        <label htmlFor="searchbox">検索</label>
+        <input
+          type="search"
+          name="searchword"
+          id="searchbox"
+          placeholder="検索ワード"
+        />
+      </div>
     </main>
   );
 }
