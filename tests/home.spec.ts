@@ -59,3 +59,8 @@ test("プレースホルダーで要素取得", async ({ page }) => {
   await page.goto("http://localhost:3000/form");
   await expect(page.getByPlaceholder(/検索ワード/)).toBeVisible();
 });
+
+test("テキストで要素取得", async ({ page }) => {
+  await page.goto("http://localhost:3000/form");
+  await expect(page.getByText(/ホーム/)).toBeVisible();
+});
