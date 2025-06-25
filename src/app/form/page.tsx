@@ -26,6 +26,9 @@ export default function Form() {
           placeholder="検索ワード"
         />
       </div>
+      <div>
+        <a href="/home">ホーム</a>
+      </div>
     </main>
   );
 }
