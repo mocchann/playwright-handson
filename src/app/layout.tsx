@@ -27,6 +27,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ul>
+          <li>
+            <a href="/">ホーム</a>
+          </li>
+          <li>
+            <a href="/form">入力フォーム</a>
+          </li>
+        </ul>
         {children}
       </body>
     </html>
