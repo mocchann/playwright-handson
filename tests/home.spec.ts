@@ -62,5 +62,5 @@ test("プレースホルダーで要素取得", async ({ page }) => {
 
 test("テキストで要素取得", async ({ page }) => {
   await page.goto("http://localhost:3000/form");
-  await expect(page.getByText(/ホーム/)).toBeVisible();
+  await expect(page.getByText(/ホーム/).first()).toBeVisible();
 });
