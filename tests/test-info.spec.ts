@@ -24,7 +24,7 @@ test("添付ファイルのテスト", async ({ page }, testInfo) => {
   const buffer = Buffer.from(await blob.arrayBuffer());
   await testInfo.attach("main.css", { body: buffer, contentType: blob.type });
 
-  // ろーかる　に出力したファイルを添付
+  // ローカルに出力したファイルを添付
   const path = testInfo.outputPath("output.txt");
   await writeFile(path, "ログデータ¥n", "utf-8");
   await testInfo.attach("local-file.log", { path, contentType: "text/plain" });
