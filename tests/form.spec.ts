@@ -1,20 +1,24 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
+import getRepoInfo from "git-repo-info";
+import Jimp from "jimp";
+import dayjs from "dayjs";
+import { join } from "path";
 
-const FORM_URL = 'http://localhost:3000/form';
-const USER_NAME = 'Taro Yamada';
+const FORM_URL = "http://localhost:3000/form";
+const USER_NAME = "Taro Yamada";
 
-test.describe('フォームページのテスト', () => {
-  test('正常系: 名前のシャッフルが成功する', async ({ page }) => {
+test.describe("フォームページのテスト", () => {
+  test("正常系: 名前のシャッフルが成功する", async ({ page }) => {
     await page.goto(FORM_URL);
 
     // 1. フォームに名前を入力
-    await page.getByLabel('名前').fill(USER_NAME);
+    await page.getByLabel("名前").fill(USER_NAME);
 
     // 2. シャッフルボタンをクリック
-    await page.getByRole('button', { name: 'シャッフル' }).click();
+    await page.getByRole("button", { name: "シャッフル" }).click();
 
     // 3. 結果が表示されるのを待つ
-    const result = page.getByTestId('shuffled-name');
+    const result = page.getByTestId("shuffled-name");
     await expect(result).toBeVisible({ timeout: 10000 }); // APIの応答を待つためにタイムアウトを延長
 
     // 4. 結果を検証する
@@ -25,23 +29,52 @@ test.describe('フォームページのテスト', () => {
     // 元の名前とは異なること（ごく稀に同じになる可能性は考慮）
     if (shuffledName !== USER_NAME) {
       // 元の文字がすべて含まれていること
-      const originalChars = USER_NAME.split('').sort().join('');
-      const shuffledChars = (shuffledName || '').split('').sort().join('');
+      const originalChars = USER_NAME.split("").sort().join("");
+      const shuffledChars = (shuffledName || "").split("").sort().join("");
       expect(shuffledChars).toBe(originalChars);
     }
   });
 
-  test('異常系: 名前が未入力の場合にエラーメッセージが表示される', async ({ page }) => {
+  test("異常系: 名前が未入力の場合にエラーメッセージが表示される", async ({
+    page,
+  }) => {
     await page.goto(FORM_URL);
 
     // 1. 名前を入力せずにシャッフルボタンをクリック
-    await page.getByRole('button', { name: 'シャッフル' }).click();
+    await page.getByRole("button", { name: "シャッフル" }).click();
 
     // 2. エラーメッセージが表示されることを確認
-    const errorMessage = page.getByText('名前を入力してください。');
+    const errorMessage = page.getByText("名前を入力してください。");
     await expect(errorMessage).toBeVisible();
 
     // 3. シャッフル結果が表示されていないことを確認
-    await expect(page.getByTestId('shuffled-name')).not.toBeVisible();
+    await expect(page.getByTestId("shuffled-name")).not.toBeVisible();
+  });
+
+  test("スクリーンショット", async ({ page }, testInfo) => {
+    await page.goto("http://localhost:3000/form");
+    const buffer = await page.screenshot();
+
+    // 取得したスクリーンショットを画像処理ライブラリで読み込み
+    const image = await Jimp.read(buffer);
+    const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+    const git = getRepoInfo();
+
+    // スクリーンショットにテキストを書き込み、別ファイルに保存する
+    await image.print(
+      font,
+      0,
+      0,
+      {
+        alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+        alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
+        text: `${git.sha.slice(0, 10)} : ${dayjs().format(
+          "YYYY/MM/DD HH:mm:ss"
+        )}`,
+      },
+      image.getWidth(),
+      image.getHeight()
+    );
+    await image.write(join(testInfo.outputDir, "screenshot01.png"));
   });
 });
