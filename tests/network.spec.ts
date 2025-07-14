@@ -25,3 +25,9 @@ test("特定のURLへのGETリクエストを待機する場合", async ({ page 
   await page.getByText("trigger request").click();
   const request = await requestPromise;
 });
+
+test("特定のURLリクエストからのレスポンスを待機する場合", async ({ page }) => {
+  const requestPromise = page.waitForResponse("**/api/fetch_data");
+  await page.getByText("trigger request").click();
+  const request = await requestPromise;
+});
