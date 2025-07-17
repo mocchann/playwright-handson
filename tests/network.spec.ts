@@ -39,3 +39,14 @@ test("特定のURLからの成功レスポンスを待機する場合", async ({
   await page.getByText("trigger request").click();
   const response = await responsePromise;
 });
+
+test("apiのモック", async ({ page }) => {
+  const testData = "";
+  await page.route("**/api/fetch_data", (route) =>
+    route.fulfill({
+      status: 200,
+      body: testData,
+    })
+  );
+  await page.goto("https://example.com");
+});
