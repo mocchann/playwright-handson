@@ -50,3 +50,7 @@ test("apiのモック", async ({ page }) => {
   );
   await page.goto("https://example.com");
 });
+
+test("リクエストを中断", async ({ page }) => {
+  await page.route("**/*.{png,jpg,jpeg}", (route) => route.abort());
+});
