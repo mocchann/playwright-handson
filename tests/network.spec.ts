@@ -54,3 +54,11 @@ test("apiのモック", async ({ page }) => {
 test("リクエストを中断", async ({ page }) => {
   await page.route("**/*.{png,jpg,jpeg}", (route) => route.abort());
 });
+
+test("リクエスト変更", async ({ page }) => {
+  await page.route("**/*", (route) => {
+    const headers = route.request().headers();
+    delete headers["X-Secret"];
+    route.continue({ headers });
+  });
+});
