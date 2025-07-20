@@ -62,3 +62,13 @@ test("リクエスト変更", async ({ page }) => {
     route.continue({ headers });
   });
 });
+
+test("レスポンスを変更", async ({ page }) => {
+  await page.route("**/title.html", async (route) => {
+    const response = await route.fetch();
+    route.fulfill({
+      response,
+      body: (await response.text()).replace("<title>", "<title>My prefix:"),
+    });
+  });
+});
