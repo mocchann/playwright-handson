@@ -1,5 +1,9 @@
 import test from "@playwright/test";
 
+test.use({
+  viewport: { width: 1280, height: 720 },
+});
+
 test("network", async ({ page }) => {
   page.on("request", (request) =>
     console.log(">>", request.method(), request.url())
